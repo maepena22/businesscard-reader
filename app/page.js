@@ -30,25 +30,24 @@ export default function Home() {
         const formData = new FormData();
         files.forEach((file, index) => {
             formData.append('files', file);
-            // Update progress as files are being added
+    
             setProgress(Math.round((index + 1) / totalFiles * 30));
         });
         formData.append('employeeId', selectedEmployee);
 
         try {
-            // Upload progress (30% to 60%)
+           
             setProgress(30);
             const response = await fetch('/api/upload', {
                 method: 'POST',
                 body: formData,
             });
 
-            // Processing progress (60% to 90%)
+  
             setProgress(60);
             const result = await response.json();
             
             if (result.success) {
-                // Complete progress (100%)
                 setProgress(100);
                 setMessage(`Successfully processed ${result.count} business cards. View them in Records.`);
                 setFiles([]);

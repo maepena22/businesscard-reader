@@ -42,7 +42,6 @@ async function initializeDb() {
     await db.close();
 }
 
-// Add new functions for employee management
 async function addEmployee(name) {
     const db = await getDb();
     const result = await db.run('INSERT INTO employees (name) VALUES (?)', [name]);
@@ -57,16 +56,12 @@ async function getAllEmployees() {
     return employees;
 }
 
-// Remove the first simple deleteEmployee function (around line 59-64)
-// and keep only the transactional version
 
 async function deleteEmployee(id) {
     const db = await getDb();
     try {
         await db.run('BEGIN TRANSACTION');
-        // Update business cards to remove reference to deleted employee
         await db.run('UPDATE business_cards SET employee_id = NULL WHERE employee_id = ?', [id]);
-        // Delete the employee
         await db.run('DELETE FROM employees WHERE id = ?', [id]);
         await db.run('COMMIT');
         return { success: true };
@@ -78,7 +73,6 @@ async function deleteEmployee(id) {
     }
 }
 
-// Update saveBusinessCard function
 async function saveBusinessCard(data) {
     const db = await getDb();
     
@@ -119,7 +113,6 @@ async function getAllBusinessCards() {
     return cards;
 }
 
-// Update the export function
 async function processUploadedImages(files, googleApiKey, openaiApiKey) {
     const data = [];
     const headers = {
@@ -132,7 +125,7 @@ async function processUploadedImages(files, googleApiKey, openaiApiKey) {
         'fax': 'Fax',
         'email': 'Email',
         'website': 'Website',
-        'employee_name': 'Uploader'  // Add uploader column
+        'employee_name': 'Uploader'  
     };
     
     for (const file of files) {
@@ -151,7 +144,6 @@ async function processUploadedImages(files, googleApiKey, openaiApiKey) {
                 const jsonData = JSON.parse(structuredData);
                 const rowData = {};
                 
-                // Map each field explicitly
                 rowData['Image'] = file.originalname;
                 rowData['organization'] = jsonData.organization || '';
                 rowData['department'] = jsonData.department || '';
@@ -175,17 +167,14 @@ async function processUploadedImages(files, googleApiKey, openaiApiKey) {
     const worksheet = workbook.addWorksheet('Business Cards');
 
     if (data.length > 0) {
-        // Add headers with proper formatting
         const headerRow = worksheet.addRow(Object.values(headers));
         headerRow.font = { bold: true };
         
-        // Add data rows with explicit mapping
         data.forEach(row => {
             const rowValues = Object.keys(headers).map(key => row[key] || '');
             worksheet.addRow(rowValues);
         });
 
-        // Auto-fit columns
         worksheet.columns.forEach(column => {
             column.width = Math.max(
                 Math.max(...worksheet.getColumn(column.number).values.map(v => v ? v.toString().length : 0)),
@@ -202,7 +191,7 @@ module.exports = {
     initializeDb,
     saveBusinessCard,
     getAllBusinessCards,
-    getDb,  // Add getDb to exports
+    getDb, 
     addEmployee,
     getAllEmployees,
     deleteEmployee

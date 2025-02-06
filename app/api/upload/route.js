@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { writeFile } from 'fs/promises';
 import { processUploadedImages } from '@/app/utils/businessCardProcessor';
-import logger from '@/app/utils/logger';  // Changed to default import
+import logger from '@/app/utils/logger';  
 
 export const config = {
     api: {

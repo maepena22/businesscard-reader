@@ -4,7 +4,7 @@ const axios = require('axios');
 const ExcelJS = require('exceljs');
 const OpenAI = require('openai');
 const { saveBusinessCard } = require('./database');
-import logger from './logger';  // Add logger import
+import logger from './logger'; 
 
 async function uploadImageAndGetText(imagePath, apiKey) {
     try {
@@ -137,10 +137,10 @@ async function processImagesInFolder(folderPath, googleApiKey, openaiApiKey, out
 async function processUploadedImages(files, googleApiKey, openaiApiKey, employeeId) {
     const data = [];
     
-    console.log(`Starting to process ${files.length} uploaded images`); // Temporary fallback logging
+    console.log(`Starting to process ${files.length} uploaded images`); 
     
     for (const file of files) {
-        console.log(`Processing ${file.originalname}`); // Temporary fallback logging
+        console.log(`Processing ${file.originalname}`);
         try {
             const extractedText = await uploadImageAndGetText(file.path, googleApiKey);
             if (!extractedText) {
@@ -156,7 +156,7 @@ async function processUploadedImages(files, googleApiKey, openaiApiKey, employee
                 jsonData.employee_id = employeeId;
                 await saveBusinessCard(jsonData);
                 data.push(jsonData);
-                console.log(`Successfully processed ${file.originalname}`); // Temporary fallback logging
+                console.log(`Successfully processed ${file.originalname}`);
             } catch (error) {
                 console.error(`Invalid JSON format for ${file.originalname}: ${error.message}`);
             }

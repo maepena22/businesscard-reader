@@ -3,7 +3,7 @@ import "./globals.css";
 import Navigation from './components/Navigation';
 import { initializeDb } from './utils/database';
 
-// Initialize database
+
 initializeDb().catch(console.error);
 
 const geistSans = Geist({
